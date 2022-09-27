@@ -1,4 +1,4 @@
-package com.mj.webmarket.entity.dto;
+package com.mj.webmarket.entity.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.mj.webmarket.entity.dto;
+package com.mj.webmarket.entity.dto.user;
 
 import com.mj.webmarket.entity.type.Role;
 import com.mj.webmarket.entity.user.User;

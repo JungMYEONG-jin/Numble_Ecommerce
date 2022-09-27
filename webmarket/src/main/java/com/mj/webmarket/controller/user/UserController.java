@@ -1,9 +1,8 @@
 package com.mj.webmarket.controller.user;
 
-import com.mj.webmarket.entity.dto.SignDto;
+import com.mj.webmarket.entity.dto.user.SignDto;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.exception.UserEmailDupException;
-import com.mj.webmarket.service.user.UserService;
 import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
