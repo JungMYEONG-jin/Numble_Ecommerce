@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    @ResponseStatus(HttpStatus.CREATED)
+//    @ResponseStatus(HttpStatus.CREATED)
     public String join(@ModelAttribute @Validated SignDto signDto){
         User user = signDto.toUser();
         if (userService.duplicateEmailCheck(user.getEmail()))
@@ -51,7 +51,8 @@ public class UserController {
         if (joinUser.getId()!=null){
             // 추후 구현
         }
-        return "home";
+        log.info("redirect to home");
+        return "redirect:/";
     }
 
 }
