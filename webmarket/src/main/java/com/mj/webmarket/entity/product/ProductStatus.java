@@ -1,14 +1,13 @@
 package com.mj.webmarket.entity.product;
 
-import com.mj.webmarket.entity.type.Status;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import javax.persistence.*;
-
-@Entity
-public class ProductStatus {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Enumerated(EnumType.STRING)
-    private Status status;
+@Getter
+@AllArgsConstructor
+public enum ProductStatus {
+    TRADING("거래중"),
+    RESERVED("예약중"),
+    FINISHED("거래완료");
+    private String value;
 }
