@@ -39,6 +39,9 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     List<Heart> hearts = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user")
+    private UserImage userImage;
+
     @Builder
     public User(String name, String email, String password, String nickName, String phone, Role UserRole) {
         this.email = email;

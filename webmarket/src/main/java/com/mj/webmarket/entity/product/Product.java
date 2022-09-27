@@ -76,5 +76,10 @@ public class Product extends BaseTimeEntity {
         this.productStatus = status;
     }
 
+    public void addImage(ProductImage image){
+        this.productImages.add(image);
+        image.setProduct(this);
+    }
+
 
 }
