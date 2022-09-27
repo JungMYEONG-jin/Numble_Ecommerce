@@ -1,4 +1,4 @@
-package com.mj.webmarket.entity;
+package com.mj.webmarket.entity.product;
 
 import com.mj.webmarket.entity.type.Status;
 

@@ -1,5 +1,6 @@
-package com.mj.webmarket.entity;
+package com.mj.webmarket.entity.category;
 
+import com.mj.webmarket.entity.product.Product;
 import lombok.Getter;
 import lombok.Setter;
 

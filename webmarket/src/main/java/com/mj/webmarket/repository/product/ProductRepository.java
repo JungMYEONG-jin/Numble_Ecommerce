@@ -1,6 +1,6 @@
-package com.mj.webmarket.repository;
+package com.mj.webmarket.repository.product;
 
-import com.mj.webmarket.entity.Product;
+import com.mj.webmarket.entity.product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
