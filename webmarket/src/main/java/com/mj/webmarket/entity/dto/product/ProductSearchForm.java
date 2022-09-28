@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductSearchForm {
-    private Long categoryId;
-    private String title;
+    private Long categoryId; // category
+    private String title; // product name
 }
