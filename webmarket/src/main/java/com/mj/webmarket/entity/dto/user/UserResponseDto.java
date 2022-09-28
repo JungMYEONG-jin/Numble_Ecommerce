@@ -15,14 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 public class UserResponseDto {
 
-    private Long memberId;
+    private Long userId;
     private String nickName;
     private String profileImage;
     private List<Long> heartProducts;
 
     @Builder
-    public UserResponseDto(Long memberId, String nickName, String profileImage, List<Long> heartProducts) {
-        this.memberId = memberId;
+    public UserResponseDto(Long userId, String nickName, String profileImage, List<Long> heartProducts) {
+        this.userId = userId;
         this.nickName = nickName;
         this.profileImage = profileImage;
         this.heartProducts = heartProducts;

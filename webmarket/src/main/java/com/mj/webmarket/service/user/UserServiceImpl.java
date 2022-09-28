@@ -1,5 +1,6 @@
 package com.mj.webmarket.service.user;
 
+import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.exception.UserNotFoundException;
 import com.mj.webmarket.repository.user.UserRepository;
@@ -38,5 +39,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean duplicateEmailCheck(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public UserResponseDto toUserResponseDto(User user) {
+        return UserResponseDto.builder().userId(user.getId()).nickName(user.getNickname()).build();
     }
 }

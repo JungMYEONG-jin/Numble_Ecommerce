@@ -1,5 +1,6 @@
 package com.mj.webmarket.service.user;
 
+import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.user.User;
 
 public interface UserService {
@@ -31,5 +32,7 @@ public interface UserService {
      * @return 중복 : true | 사용가능 : false
      */
     boolean duplicateEmailCheck(String email);
+
+    UserResponseDto toUserResponseDto(User user);
 
 }

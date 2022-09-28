@@ -1,38 +1,109 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0,
-    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi"
-          charset="UTF-8">
-    <!-- Import할 CSS 파일 (경로 주의) -->
+    minimum-scale=1.0, user-scalable=yes, target-densitydpi=medium-dpi">
+    <meta charset="UTF-8">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../static/css/bootstrap.min.css"
           rel="stylesheet">
     <link th:href="@{/css/integrated-css.css}"
           href="../static/css/integrated-css.css"
           rel="stylesheet">
-    <title>상품 목록</title>
-    <style>
-        div.paging {
-            display: flex;
-            align-items: center; /* 수직 정렬 */
-            flex-direction: row; /* default: row */
-            justify-content: center; /* flex direction에 대해서 정렬방식 선택 */
-        }
-    </style>
+    <title>상품목록</title>
 </head>
+<style>
+    .add-btn{
+        position:fixed;
+        width:35px;
+        height:35px;
+        bottom:70px;
+        right:20px;
+    }
+    .div-header {
+        width:100%;
+        height:70px;
+        text-align:left;
+    }
+    .div-footer{
+        width: 100%;
+        height: 88px;
+        /* background-color: orange; */
+        border: 1px;
+        /* border: solid; */
+        border-top-width: thin;
+        border-style: solid;
+    }
+    .div-footer-left {
+        width:50%;
+        height:88px;
+        float: left;
+        text-align:center;
+        margin-top:15px;
+    }
+    .div-footer-right {
+        width:50%;
+        height:88px;
+        float: right;
+        text-align:center;
+        margin-top:15px;
+    }
 
-<!-- 헤더 -->
-<header class="container" style="margin: 20px auto;">
-    <div class="row row-cols-auto">
-        <div class="col">
-            <a th:href="@{/}">
-                <img src = "../../static/images/logo.jpeg" th:src="@{/images/main.png}" width="300">
-            </a>
-        </div>
-    </div>
-    </div>
-</header>
+    .div-index {
+        width:100%;
+        height:500px;
+    }
+    .div1 {
+        width:98%;
+        height:130px;
+        margin-left:3px;
+    }
+    .div2 {
+        margin-top : 10px;
+        margin-left : 10px;
+        width:45%;
+        height:110px;
+        float:left
+    }
+    .div3 {
+        margin-top : 10px;
+        margin-left : 10px;
+        width:45%;
+        height:110px;
+
+        float:left
+    }
+    .h6-text {
+        display: block;
+        font-size: 0.67em;
+        margin-block-start: 0em;
+        margin-block-end: 1em;
+        margin-inline-start: 5px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+
+    .h6-footer {
+        display: block;
+        font-size: 0.67em;
+        margin-block-start: 0em;
+        margin-block-end: 1em;
+        margin-inline-start: 5px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+
+    div.paging {
+        display: flex;
+        align-items: center; /* 수직 정렬 */
+        flex-direction: row; /* default: row */
+        justify-content: center; /* flex direction에 대해서 정렬방식 선택 */
+    }
+
+</style>
+<body>
+<div th:replace="layout/header :: authorize-fragment"/>
 
 <article class="container">
     <form th:action="@{/products/search}" th:object="${searchForm}" method="POST" style="display: flex; justify-content: flex-end; padding: 10px 0;">
@@ -48,30 +119,25 @@
     </form>
 </article>
 
-<div class="container">
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>상품명</th>
-                <th>가격</th>
-                <th>상태</th>
-                <th>댓글수</th>
-                <th>하트수</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="product : ${products}">
-                <td th:text="${product.getTitle()}"></td>
-                <td th:text="${product.getPrice()}"></td>
-                <td th:text="${product.getProductStatus().getValue()}"></td>
-                <td th:text="${product.getReplyCount()}"></td>
-                <td th:text="${product.getHeartCount()}"></td>
-            </tr>
-            </tbody>
-        </table>
+<div style="overflow: scroll; width: 100%; height: 500px;" class="div-index">
+    <div class="div1" th:each="product : ${products}">
+        <div class="div2">
+            <!--<a th:href="@{/products/{product_id}(product_id = ${product.id})}"> -->
+            <a th:href="@{|/products/${product_id}|}">
+                <img th:src="${product.thumbnailImage}" style="width:100%; height:100%">
+            </a>
+        </div>
+
+        <div class="div3">
+            <h6 th:if="${product?.getProductStatus().getValue()} == '거래가능'" th:text="${product.getTitle()}"></h6>
+            <h6 th:if="${product?.getProductStatus().getValue()} == '예약중'" th:text="'[예약중]' + ${product.getTitle()}"></h6>
+            <h6 th:if="${product?.getProductStatus().getValue()} == '거래완료'" th:text="'[거래완료]' + ${product.getTitle()}"></h6>
+        </div>
+
+
     </div>
 </div>
+
 
 <div class="paging" th:if="${!products.isEmpty()}">
     <!-- 전역 변수 선언 -->
@@ -125,7 +191,6 @@
         </ul>
     </nav>
 </div> <!-- /container -->
-
 <footer class="footer py-5 mt-auto">
     © By MJ. All rights reserved.
 </footer>
