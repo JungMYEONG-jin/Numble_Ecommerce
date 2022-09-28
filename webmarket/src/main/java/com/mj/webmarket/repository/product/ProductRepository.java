@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    // category 검색
+    // category 검색 + 페이징
     Page<Product> findByCategory(Pageable pageable, Category category);
 
-    List<Product> findByCategory(Category category);
+    Optional<Product> findByCategory(Category category);
 }

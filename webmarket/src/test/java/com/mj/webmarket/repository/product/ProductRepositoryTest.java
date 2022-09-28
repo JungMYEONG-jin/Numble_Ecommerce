@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class ProductRepositoryTest {
@@ -32,25 +33,9 @@ class ProductRepositoryTest {
         productRepository.save(product);
         productRepository.save(product2);
 
-        List<Product> byCategory = productRepository.findByCategory(category);
-        Assertions.assertThat(byCategory.get(0).getCategory().getId()).isEqualTo(category.getId());
-        Assertions.assertThat(byCategory.get(0).getCategory().getId()).isEqualTo(category2.getId());
+        Product byCategory = productRepository.findByCategory(category).orElse(null);
+        Assertions.assertThat(byCategory.getCategory().getId()).isEqualTo(category.getId());
+        Assertions.assertThat(byCategory.getCategory().getId()).isEqualTo(category2.getId());
     }
 
-    @Transactional
-    @Test
-    void findByCategoryFailTest() {
-        Category category = new Category();
-        category.setName("food");
-        Category category2 = new Category();
-        category2.setName("drink");
-        Product product = Product.builder().price(3000).category(category).build();
-        Product product2 = Product.builder().price(3000).category(category2).build();
-
-        productRepository.save(product);
-        productRepository.save(product2);
-
-        List<Product> byCategory = productRepository.findByCategory(category);
-        Assertions.assertThat(byCategory.get(0).getCategory().getId()).isEqualTo(category2.getId());
-    }
 }
