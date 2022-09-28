@@ -23,7 +23,8 @@ public class Product extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // cascade all 이므로 product만 저장하면 됨
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
     @OneToMany(mappedBy = "product")
@@ -36,7 +37,7 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     List<ProductImage> productImages = new ArrayList<>();
     //상품 정보
-    @NotBlank(message = "상품 제목은 필수입니다.")
+//    @NotBlank(message = "상품 제목은 필수입니다.")
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
