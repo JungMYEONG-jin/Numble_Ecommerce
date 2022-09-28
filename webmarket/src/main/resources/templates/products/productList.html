@@ -35,7 +35,7 @@
 </header>
 
 <article class="container">
-    <form th:action="@{/products}" th:object="${searchForm}" method="POST" style="display: flex; justify-content: flex-end; padding: 10px 0;">
+    <form th:action="@{/products/search}" th:object="${searchForm}" method="POST" style="display: flex; justify-content: flex-end; padding: 10px 0;">
         <select th:field="*{categoryId}" class="form-select">
             <option value="">==상품 카테고리==</option>
             <option th:each="type : ${T(com.mj.webmarket.entity.type.CategoryType).values()}"
@@ -62,9 +62,9 @@
             </thead>
             <tbody>
             <tr th:each="product : ${products}">
-                <td th:text="${product.getTitle()}" th:href="@{|/proudcts/{product.id}|}"></td>
+                <td th:text="${product.getTitle()}"></td>
                 <td th:text="${product.getPrice()}"></td>
-                <td th:text="${product.getProductStatus()}"></td>
+                <td th:text="${product.getProductStatus().getValue()}"></td>
                 <td th:text="${product.getReplyCount()}"></td>
                 <td th:text="${product.getHeartCount()}"></td>
             </tr>
@@ -88,7 +88,7 @@
         <ul class="pagination ">
             <!-- 처음으로 이동 -->
             <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/products/(page=0)}">
+                <a class="page-link" th:href="@{/products/search/(page=0)}">
                     <span>&laquo;</span>
                     <span class="sr-only">처음</span>
                 </a>
@@ -96,7 +96,7 @@
 
             <!-- 이전으로 이동 -->
             <li th:classappend="${products.first} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="${products.first} ? '#' : @{/products/(page=${pageNumber - 1})}" aria-label="Previous">
+                <a class="page-link" th:href="${products.first} ? '#' : @{/products/search/(page=${pageNumber - 1})}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                     <span class="sr-only">Previous</span>
                 </a>
@@ -104,12 +104,12 @@
 
             <!-- 특정 페이지로 이동 -->
             <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{/products/(page=${page - 1})}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{/products/search/(page=${page - 1})}"></a>
             </li>
 
             <!-- 다음으로 이동 -->
             <li th:classappend="${products.last} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="${products.last} ? '#' : @{/products/(page=${pageNumber + 1})}" aria-label="Next">
+                <a class="page-link" th:href="${products.last} ? '#' : @{/products/search/(page=${pageNumber + 1})}" aria-label="Next">
                     <span aria-hidden="true">&gt;</span>
                     <span class="sr-only">Next</span>
                 </a>
@@ -117,7 +117,7 @@
 
             <!-- 마지막으로 이동 -->
             <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/products/(page=${totalPages - 1})}">
+                <a class="page-link" th:href="@{/products/search/(page=${totalPages - 1})}">
                     <span>&raquo;</span>
                     <span class="sr-only">마지막</span>
                 </a>

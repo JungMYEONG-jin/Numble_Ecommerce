@@ -31,6 +31,17 @@ public class ProductController {
      * @return
      */
     @GetMapping("/products")
+    public String productListMain(Model model, @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable){
+        Page<Product> products = productService.searchAll(pageable);
+        form = new ProductSearchForm(); // 초기화
+        model.addAttribute("products", products);
+        model.addAttribute("searchForm", form);
+        return "products/productList";
+    }
+
+
+
+    @GetMapping("/products/search")
     public String productList(Model model, @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable){
         Page<Product> products = productService.searchProductByCondition(form, pageable);
         model.addAttribute("products", products);
@@ -45,7 +56,7 @@ public class ProductController {
      * @param pageable
      * @return
      */
-    @PostMapping("/products")
+    @PostMapping("/products/search")
     public String productListPost(Model model, @ModelAttribute("searchForm") ProductSearchForm searchForm, @PageableDefault(page=0, size = 10, direction = Sort.Direction.DESC) Pageable pageable)
     {
         this.form = searchForm;

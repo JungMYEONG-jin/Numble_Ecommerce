@@ -2,7 +2,6 @@ package com.mj.webmarket.entity.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @RequiredArgsConstructor

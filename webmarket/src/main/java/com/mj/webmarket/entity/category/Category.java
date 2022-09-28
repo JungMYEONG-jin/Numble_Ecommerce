@@ -13,7 +13,6 @@ import javax.persistence.Id;
 @Setter
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //카테고리 네임
     private String name;

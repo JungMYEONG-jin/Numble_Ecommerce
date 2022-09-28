@@ -40,8 +40,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf().disable();
-        return http.authorizeRequests().antMatchers("/products/**", "/mypage/**").authenticated().anyRequest().permitAll()
-                .and().formLogin().loginPage("/login").loginProcessingUrl("/login")
+        return http.authorizeRequests()
+                .antMatchers("/products/**", "/mypage/**").authenticated()
+                .anyRequest().permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/products")
@@ -49,7 +54,10 @@ public class SecurityConfig {
                 .logout()
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID").and().build();
+                .deleteCookies("JSESSIONID")
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/ErrorPage").and().build();
     }
 
 }
