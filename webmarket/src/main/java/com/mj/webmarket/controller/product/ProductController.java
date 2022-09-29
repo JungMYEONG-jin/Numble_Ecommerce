@@ -121,24 +121,4 @@ public class ProductController {
         return "products/productDetails";
     }
 
-    /**
-     * 상품에 달린 댓글 보기
-     * @param productId
-     * @param userDetails
-     * @param model
-     * @return
-     */
-    @GetMapping("/products/{productId}/reply")
-    public String showReply(@PathVariable("productId") Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model, @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable){
-        Page<Reply> replies = replyService.showProductReviews(productId, pageable);
-        User user = userService.findUser(userDetails.getUsername());
-        UserResponseDto userResponseDto = userService.toUserResponseDto(user);
-        model.addAttribute("replies", replies);
-        model.addAttribute("userInfo", userResponseDto);
-        return "reply/replyList";
-    }
-
-
-
-
 }
