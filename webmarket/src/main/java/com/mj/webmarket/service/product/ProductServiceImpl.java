@@ -1,19 +1,23 @@
 package com.mj.webmarket.service.product;
 
 import com.mj.webmarket.entity.category.Category;
+import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
+import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
 import com.mj.webmarket.entity.product.Product;
-import com.mj.webmarket.exception.CategoryNotFoundException;
 import com.mj.webmarket.exception.ProductNotFoundException;
 import com.mj.webmarket.repository.category.CategoryRepository;
 import com.mj.webmarket.repository.product.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -67,6 +71,28 @@ public class ProductServiceImpl implements ProductService{
         }
     }
 
+    @Override
+    public Product findOneById(Long productId) {
+        return productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("해당 번호의 상품이 존재하지 않습니다..."));
+    }
+
+    @Override
+    public ProductDetailResponse toProductResponseDto(Product product) {
+        ProductDetailResponse response = ProductDetailResponse.builder().id(product.getId())
+                .productStatus(product.getProductStatus())
+                .productImages(product.getProductImages().stream().map(p -> p.getServerFileName()).collect(Collectors.toList()))
+                .price(product.getPrice())
+                .categoryId(product.getCategory().getId())
+                .description(product.getDescription())
+                .heartCount(product.getHeartCount())
+                .replyCount(product.getReplyCount())
+                .title(product.getTitle())
+                .build();
+        if(response.getProductImages().isEmpty())
+            response.addDefaultImage();
+        return response;
+    }
+
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {
         Category category = categoryRepository.findById(form.getCategoryId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByTitleAndCategory(form.getTitle(), category);
@@ -93,4 +119,17 @@ public class ProductServiceImpl implements ProductService{
             return true;
         return false;
     }
+
+    public Page<ProductListResponse> productToProductListResponseDtoPage(Pageable pageable, List<Product> products) {
+        List<ProductListResponse> productList = products.stream().map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
+                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
+        log.info("productList size {}", productList.size());
+        int start = (int) pageable.getOffset();
+        log.info("start {} ", start);
+        int end = Math.min((start + pageable.getPageSize()), productList.size());
+        log.info("end {} ", end);
+        return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
+    }
+
+
 }

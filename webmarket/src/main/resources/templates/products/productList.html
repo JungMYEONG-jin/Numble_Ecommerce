@@ -123,8 +123,8 @@
     <div class="div1" th:each="product : ${products}">
         <div class="div2">
             <!--<a th:href="@{/products/{product_id}(product_id = ${product.id})}"> -->
-            <a th:href="@{|/products/${product_id}|}">
-                <img th:src="${product.thumbnailImage}" style="width:100%; height:100%">
+            <a th:href="@{|/products/${product.id}|}">
+                <img th:src="${product.thumbnailImage}" style="width:70%; height:100%">
             </a>
         </div>
 
@@ -132,12 +132,30 @@
             <h6 th:if="${product?.getProductStatus().getValue()} == '거래가능'" th:text="${product.getTitle()}"></h6>
             <h6 th:if="${product?.getProductStatus().getValue()} == '예약중'" th:text="'[예약중]' + ${product.getTitle()}"></h6>
             <h6 th:if="${product?.getProductStatus().getValue()} == '거래완료'" th:text="'[거래완료]' + ${product.getTitle()}"></h6>
+            <h6 class="h6-text">장소</h6>
+            <h6 th:text="${product.getPrice()}" class="h6-text"></h6>
+            <span style=" display: flex; justify-content: right;">
+             <span th:if="${product.getReplyCount() > 0}" style="display:flex;">
+                    <img th:src="@{/images/sellBtn.png}" style="width:15px; height:15px">
+                    <h6 class="h6-text" th:text="${product.getReplyCount()}"></h6>
+             </span>
+                &nbsp;&nbsp;
+                <span th:if="${product.getHeartCount() > 0}" style="display:flex;" >
+                 <div th:if="${#lists.contains(userInfo?.heartProducts, product.id)}" style="display:flex;">
+                    <img  th:src="@{/images/realHeartBtn.png}" style="width:15px; height:15px">
+                      <h6 class="h6-text" th:text="${product.getHeartCount}"></h6>
+                 </div>
+                    <div th:unless="${#lists.contains(userInfo?.heartProducts, product.id)}" style="display:flex;">
+                     <img th:src="@{/images/heartBtn.png}" style="width:15px; height:15px">
+                         <h6 class="h6-text" th:text="${product.getHeartCount()}"></h6>
+                 </div>
+
+             </span>
+
+            </span>
         </div>
-
-
     </div>
 </div>
-
 
 <div class="paging" th:if="${!products.isEmpty()}">
     <!-- 전역 변수 선언 -->

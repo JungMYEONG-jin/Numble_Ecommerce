@@ -1,5 +1,6 @@
 package com.mj.webmarket.controller.product;
 
+import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
@@ -10,7 +11,6 @@ import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -18,13 +18,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -49,10 +45,7 @@ public class ProductController {
         UserResponseDto userResponseDto = userService.toUserResponseDto(user);
 
         List<Product> productList = productService.searchProductByCondition(form);
-        Page<ProductListResponse> products = productToProductListResponseDtoPage(pageable, productList);
-        for (ProductListResponse product : products) {
-            log.info("product response {}", product);
-        }
+        Page<ProductListResponse> products = productService.productToProductListResponseDtoPage(pageable, productList);
 
         model.addAttribute("userInfo", userResponseDto);
         model.addAttribute("products", products);
@@ -60,13 +53,12 @@ public class ProductController {
         return "products/productList";
     }
 
-
     @GetMapping("/products/search")
     public String productList(@AuthenticationPrincipal UserDetails userDetails,  Model model, @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable){
         List<Product> productList = productService.searchProductByCondition(form);
         User user = userService.findUser(userDetails.getUsername());
         UserResponseDto userResponseDto = userService.toUserResponseDto(user);
-        Page<ProductListResponse> products = productToProductListResponseDtoPage(pageable, productList);
+        Page<ProductListResponse> products = productService.productToProductListResponseDtoPage(pageable, productList);
         model.addAttribute("userInfo", userResponseDto);
         model.addAttribute("products", products);
         model.addAttribute("searchForm", form);
@@ -89,22 +81,31 @@ public class ProductController {
         model.addAttribute("userInfo", userResponseDto);
         log.info("cateid {}, title {}", form.getCategoryId(), form.getTitle());
         List<Product> productList = productService.searchProductByCondition(form);
-        Page<ProductListResponse> products = productToProductListResponseDtoPage(pageable, productList);
+        Page<ProductListResponse> products = productService.productToProductListResponseDtoPage(pageable, productList);
         model.addAttribute("products", products);
         return "products/productList";
     }
 
+    // 단건 조회
+    @GetMapping("/products/{productId}")
+    public String getSpecificProduct(@PathVariable("productId") Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model){
+        // product to response dto
+        Product findedProudct = productService.findOneById(productId);
+        ProductDetailResponse productResponse = productService.toProductResponseDto(findedProudct);
 
-    private Page<ProductListResponse> productToProductListResponseDtoPage(Pageable pageable, List<Product> products) {
-        List<ProductListResponse> productList = products.stream().map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
-                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/logo.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
-        log.info("productList size {}", productList.size());
-        int start = (int) pageable.getOffset();
-        log.info("start {} ", start);
-        int end = Math.min((start + pageable.getPageSize()), productList.size());
-        log.info("end {} ", end);
-        return new PageImpl<>(productList.subList(start, end), pageable, productList.size());
+        User owner = userService.findUser(findedProudct.getUser().getEmail());
+        UserResponseDto ownerInfo = userService.toUserResponseDto(owner);
+
+        User user = userService.findUser(userDetails.getUsername());
+        UserResponseDto myInfo = userService.toUserResponseDto(user);
+        model.addAttribute("myInfo", myInfo);
+        model.addAttribute("ownerInfo", ownerInfo);
+        model.addAttribute("product", productResponse);
+        log.info("user name {}", user.getName());
+        return "products/productDetails";
     }
+
+
 
 
 }

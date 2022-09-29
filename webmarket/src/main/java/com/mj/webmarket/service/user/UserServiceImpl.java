@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -43,6 +45,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponseDto toUserResponseDto(User user) {
-        return UserResponseDto.builder().userId(user.getId()).nickName(user.getNickname()).build();
+        String userImg = "/images/carrot.png";
+        return UserResponseDto.builder().userId(user.getId()).nickName(user.getNickname()).profileImage(user.getUserImage()==null?userImg:user.getUserImage().getServerFileName())
+                .heartProducts(user.getHearts().stream().map(heart -> heart.getProductInfo()).collect(Collectors.toList())).build();
     }
 }

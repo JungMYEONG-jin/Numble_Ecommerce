@@ -2,10 +2,7 @@ package com.mj.webmarket.entity.dto.product;
 
 import com.mj.webmarket.entity.product.ProductImage;
 import com.mj.webmarket.entity.product.ProductStatus;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class ProductDetailResponse {
 
     private Long id;
