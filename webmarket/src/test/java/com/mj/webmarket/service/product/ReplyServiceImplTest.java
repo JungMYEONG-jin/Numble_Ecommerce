@@ -34,9 +34,9 @@ class ReplyServiceImplTest {
 
         for(int i=1;i<=20;i++){
             if(i%2==1){
-                replyService.saveReview(Reply.builder().comment("최고로 맛나요 정말!!").product(product1).user(user).build());
+                replyService.saveReview(Reply.builder().comment("저번에 맛있었는데 별로네요...").product(product1).user(user).build());
             }else{
-                replyService.saveReview(Reply.builder().comment("별로 맛있는줄 모르겠어요...").product(product2).user(user).build());
+                replyService.saveReview(Reply.builder().comment("치킨에 기름이 많아요..").product(product2).user(user).build());
             }
 
         }

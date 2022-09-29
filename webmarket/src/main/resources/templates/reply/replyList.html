@@ -71,7 +71,7 @@
         <ul class="pagination ">
             <!-- 처음으로 이동 -->
             <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/replies/search/(page=0)}">
+                <a class="page-link" th:href="@{/products/{productId}/reply/(page=0, productId=${pageInfo})}">
                     <span>&laquo;</span>
                     <span class="sr-only">처음</span>
                 </a>
@@ -79,7 +79,7 @@
 
             <!-- 이전으로 이동 -->
             <li th:classappend="${replies.first} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="${replies.first} ? '#' : @{/replies/search/(page=${pageNumber - 1})}" aria-label="Previous">
+                <a class="page-link" th:href="${replies.first} ? '#' : @{/products/{productId}/reply/(page=${pageNumber - 1}, productId=${pageInfo})}" aria-label="Previous">
                     <span aria-hidden="true">&lt;</span>
                     <span class="sr-only">Previous</span>
                 </a>
@@ -87,12 +87,12 @@
 
             <!-- 특정 페이지로 이동 -->
             <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                <a th:text="${page}" class="page-link" th:href="@{/replies/search/(page=${page - 1})}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{/products/{productId}/reply/(page=${page - 1}, productId=${pageInfo})}"></a>
             </li>
 
             <!-- 다음으로 이동 -->
             <li th:classappend="${replies.last} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="${replies.last} ? '#' : @{/replies/search/(page=${pageNumber + 1})}" aria-label="Next">
+                <a class="page-link" th:href="${replies.last} ? '#' : @{/products/{productId}/reply/(page=${pageNumber + 1}, productId=${pageInfo})}" aria-label="Next">
                     <span aria-hidden="true">&gt;</span>
                     <span class="sr-only">Next</span>
                 </a>
@@ -100,7 +100,7 @@
 
             <!-- 마지막으로 이동 -->
             <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
-                <a class="page-link" th:href="@{/replies/search/(page=${totalPages - 1})}">
+                <a class="page-link" th:href="@{/products/{productId}/reply/(page=${totalPages - 1}, productId=${pageInfo})}">
                     <span>&raquo;</span>
                     <span class="sr-only">마지막</span>
                 </a>
