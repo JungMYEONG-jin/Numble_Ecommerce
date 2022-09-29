@@ -13,4 +13,6 @@ public interface ProductService {
     List<Product> searchProductByCondition(ProductSearchForm form);
     Product findOneById(Long productId);
     ProductDetailResponse toProductResponseDto(Product product);
+    void addProduct(Product product);
+    void deleteProduct(Long productId);
 }

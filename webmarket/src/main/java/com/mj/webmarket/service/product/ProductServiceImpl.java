@@ -14,13 +14,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
 
@@ -92,6 +93,18 @@ public class ProductServiceImpl implements ProductService{
         if(response.getProductImages().isEmpty())
             response.addDefaultImage();
         return response;
+    }
+
+    @Transactional
+    @Override
+    public void addProduct(Product product) {
+        productRepository.save(product);
+    }
+
+    @Transactional
+    @Override
+    public void deleteProduct(Long productId) {
+        productRepository.deleteById(productId);
     }
 
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {
