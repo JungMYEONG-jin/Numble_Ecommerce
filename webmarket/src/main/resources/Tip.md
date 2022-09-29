@@ -13,3 +13,21 @@ could not initialize proxy - no Session
 다시말해서, 지연 로딩을 하려면 해당 객체는 무조건 영속성 컨텍스트에서 관리해야 한다.
 
 해결법은 @Transactional을 줘서 같은 세션에 유지시키자
+
+
+
+UserDetails 란?
+
+Spring Security에서 사용자의 정보를 담는 인터페이스이다.
+
+Spring Security에서 사용자의 정보를 불러오기 위해서 구현해야 하는 인터페이스로 기본 오버라이드 메서드들은 아래와 같다.
+
+
+메소드	            리턴 타입	                                설명	기본값
+getAuthorities()	Collection<? extends GrantedAuthority>	계정의 권한 목록을 리턴	 
+getPassword()	    String	계정의 비밀번호를 리턴	 
+getUsername()	    String	계정의 고유한 값을 리턴               ( ex : DB PK값, 중복이 없는 이메일 값 )	 
+isAccountNonExpired()	boolean	계정의 만료 여부 리턴	        true ( 만료 안됨 )
+isAccountNonLocked()	boolean	계정의 잠김 여부 리턴	        true ( 잠기지 않음 )
+isCredentialsNonExpired()	boolean	비밀번호 만료 여부 리턴	    true ( 만료 안됨 )
+isEnabled()	        boolean	계정의 활성화 여부 리턴	            true ( 활성화 됨 )
