@@ -30,6 +30,16 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
+    public Page<Reply> getAllReviews(Pageable pageable) {
+        return replyRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Reply> getAllReviews() {
+        return replyRepository.findAll();
+    }
+
+    @Override
     @Transactional
     public void deleteProductReviewAll(Long productId) {
         replyRepository.deleteByProductId(productId);

@@ -13,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 class ReplyServiceImplTest {
 
@@ -58,11 +56,15 @@ class ReplyServiceImplTest {
     @Test
     void deleteByUserId(){
         replyService.deleteUserReviewAll(1L);
+        List<Reply> reviews = replyService.getAllReviews();
+        Assertions.assertThat(reviews.size()).isEqualTo(0);
     }
 
     @Transactional
     @Test
     void deleteByProductAndUser(){
         replyService.deleteProductReview(1L, 1L);
+        List<Reply> reviews = replyService.getAllReviews();
+        Assertions.assertThat(reviews.size()).isEqualTo(10);
     }
 }
