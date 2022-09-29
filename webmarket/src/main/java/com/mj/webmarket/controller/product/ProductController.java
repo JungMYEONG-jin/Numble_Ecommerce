@@ -5,6 +5,7 @@ import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.product.Product;
+import com.mj.webmarket.entity.product.Reply;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.service.product.ProductServiceImpl;
 import com.mj.webmarket.service.product.ReplyServiceImpl;
@@ -55,6 +56,13 @@ public class ProductController {
         return "products/productList";
     }
 
+    /**
+     * 카테고리, 상품이름 검색 결과 보여주는 화면
+     * @param userDetails
+     * @param model
+     * @param pageable
+     * @return
+     */
     @GetMapping("/products/search")
     public String productList(@AuthenticationPrincipal UserDetails userDetails,  Model model, @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable){
         List<Product> productList = productService.searchProductByCondition(form);
@@ -88,7 +96,13 @@ public class ProductController {
         return "products/productList";
     }
 
-    // 단건 조회
+    /**
+     * 특정 상품 디테일하게 보기
+     * @param productId
+     * @param userDetails
+     * @param model
+     * @return
+     */
     @GetMapping("/products/{productId}")
     public String getSpecificProduct(@PathVariable("productId") Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model){
         // product to response dto
@@ -107,15 +121,22 @@ public class ProductController {
         return "products/productDetails";
     }
 
-//    // 상품에 달린 댓글 보기
-//    @GetMapping("/products/{productId}/reply")
-//    public String showReply(@PathVariable("proudctId") Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model){
-//
-//
-//
-//
-//
-//    }
+    /**
+     * 상품에 달린 댓글 보기
+     * @param productId
+     * @param userDetails
+     * @param model
+     * @return
+     */
+    @GetMapping("/products/{productId}/reply")
+    public String showReply(@PathVariable("productId") Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model, @PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable){
+        Page<Reply> replies = replyService.showProductReviews(productId, pageable);
+        User user = userService.findUser(userDetails.getUsername());
+        UserResponseDto userResponseDto = userService.toUserResponseDto(user);
+        model.addAttribute("replies", replies);
+        model.addAttribute("userInfo", userResponseDto);
+        return "reply/replyList";
+    }
 
 
 
