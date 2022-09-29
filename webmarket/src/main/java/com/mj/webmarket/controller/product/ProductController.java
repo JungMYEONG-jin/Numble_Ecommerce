@@ -7,6 +7,7 @@ import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.service.product.ProductServiceImpl;
+import com.mj.webmarket.service.product.ReplyServiceImpl;
 import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class ProductController {
 
     private final ProductServiceImpl productService;
     private final UserServiceImpl userService;
+    private final ReplyServiceImpl replyService;
     private ProductSearchForm form = new ProductSearchForm();
 
     /**
@@ -104,6 +106,16 @@ public class ProductController {
         log.info("user name {}", user.getName());
         return "products/productDetails";
     }
+
+//    // 상품에 달린 댓글 보기
+//    @GetMapping("/products/{productId}/reply")
+//    public String showReply(@PathVariable("proudctId") Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model){
+//
+//
+//
+//
+//
+//    }
 
 
 
