@@ -173,7 +173,7 @@
     <div th:if="${product?.getProductStatus().getValue()} == '예약중'" th:text="'[예약중] '+${product.getTitle()}"></div>
     <div th:if="${product?.getProductStatus().getValue()} == '거래완료'" th:text="'[거래완료] '+${product.getTitle()}"></div>
     <div th:text="${product.getPrice()}"></div>
-    <div th:text="${product.getCategory()}"></div>
+    <div th:text="${product.getCategory().getName()}"></div>
     <div th:text="${product.getDescription()}"></div>
 </div>
 

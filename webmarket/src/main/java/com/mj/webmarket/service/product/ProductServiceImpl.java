@@ -87,6 +87,7 @@ public class ProductServiceImpl implements ProductService{
                 .heartCount(product.getHeartCount())
                 .replyCount(product.getReplyCount())
                 .title(product.getTitle())
+                .category(product.getCategory())
                 .build();
         if(response.getProductImages().isEmpty())
             response.addDefaultImage();

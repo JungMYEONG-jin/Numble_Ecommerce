@@ -1,5 +1,6 @@
 package com.mj.webmarket.entity.dto.product;
 
+import com.mj.webmarket.entity.category.Category;
 import com.mj.webmarket.entity.product.ProductImage;
 import com.mj.webmarket.entity.product.ProductStatus;
 import lombok.*;
@@ -22,9 +23,10 @@ public class ProductDetailResponse {
     private ProductStatus productStatus;
     private Long categoryId;
     private List<String> productImages = new ArrayList<>();
+    private Category category;
 
     @Builder
-    public ProductDetailResponse(Long id, String title, String description, Integer replyCount, Integer heartCount, Integer price, ProductStatus productStatus, Long categoryId, List<String> productImages) {
+    public ProductDetailResponse(Long id, String title, String description, Integer replyCount, Integer heartCount, Integer price, ProductStatus productStatus, Long categoryId, List<String> productImages, Category category) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,6 +36,7 @@ public class ProductDetailResponse {
         this.productStatus = productStatus;
         this.categoryId = categoryId;
         this.productImages = productImages;
+        this.category = category;
     }
 
     public void addDefaultImage(){
