@@ -9,7 +9,7 @@
 </head>
 <div class="div-header" th:fragment="authorize-fragment" >
     <div th:if="${#authorization.expr('isAuthenticated()')}">
-        <a th:href="@{/products/{product_id}(product_id=${pageInfo})}"><img src="/images/backBtn.png"></a>
+        <a th:href="@{/products/{product_id}(product_id=${pageInfo})}"><img th:src="@{/images/backBtn.png}"></a>
     </div>
 </div>
 
