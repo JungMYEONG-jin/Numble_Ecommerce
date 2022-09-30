@@ -7,6 +7,7 @@ import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.Reply;
 import com.mj.webmarket.entity.user.User;
+import com.mj.webmarket.service.heart.HeartServiceImpl;
 import com.mj.webmarket.service.product.ProductServiceImpl;
 import com.mj.webmarket.service.product.ReplyServiceImpl;
 import com.mj.webmarket.service.user.UserServiceImpl;
@@ -32,7 +33,7 @@ public class ProductController {
 
     private final ProductServiceImpl productService;
     private final UserServiceImpl userService;
-    private final ReplyServiceImpl replyService;
+    private final HeartServiceImpl heartService;
     private ProductSearchForm form = new ProductSearchForm();
 
     /**
@@ -120,5 +121,13 @@ public class ProductController {
         log.info("user name {}", user.getName());
         return "products/productDetails";
     }
+
+
+//    //좋아요 기능
+//    @PostMapping("/products/{productId}/addHeart")
+//    public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails){
+//        User user = userService.findUser(userDetails.getUsername());
+//        heartService
+//    }
 
 }
