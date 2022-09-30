@@ -3,6 +3,7 @@
 1. 숫자만 남기기
 ```java
 String s = num.replaceAll("[^0-9]+", "");
+//https://github.com/HyoungUkJJang/karrot_market/blob/master/src/main/java/com/numble/karrot/reply/dto/ReplyRegisterRequest.java
 ```
 
 
