@@ -68,6 +68,7 @@ public class ReplyController {
         User user = userService.findUser(userDetails.getUsername());
         Reply reply = request.toReply(user, product);
         replyService.saveReview(reply);
+        productService.addReplyCount(product);
         return "redirect:/products/"+productId+"/reply";
     }
 }

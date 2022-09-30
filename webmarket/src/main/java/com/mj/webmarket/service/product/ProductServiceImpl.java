@@ -107,14 +107,28 @@ public class ProductServiceImpl implements ProductService{
         productRepository.deleteById(productId);
     }
 
+    @Transactional
     @Override
     public void addHeartCount(Product product) {
         product.addHeartCount();
     }
 
+    @Transactional
     @Override
     public void decreaseHeartCount(Product product) {
         product.decreaseHeartCount();
+    }
+
+    @Transactional
+    @Override
+    public void addReplyCount(Product product) {
+        product.addReplyCount();
+    }
+
+    @Transactional
+    @Override
+    public void decreaseReplyCount(Product product) {
+        product.decreaseReplyCount();
     }
 
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {

@@ -41,8 +41,8 @@ public class Product extends BaseTimeEntity {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
-    private Integer replyCount;
-    private Integer heartCount;
+    private Integer replyCount = 0;
+    private Integer heartCount = 0;
     private Integer price;
 
     @Builder

@@ -17,6 +17,6 @@ public interface ProductService {
     void deleteProduct(Long productId);
     void addHeartCount(Product product);
     void decreaseHeartCount(Product product);
-//    void addReplyCount(Product product);
-//    void decreaseReplyCount(Product product);
+    void addReplyCount(Product product);
+    void decreaseReplyCount(Product product);
 }

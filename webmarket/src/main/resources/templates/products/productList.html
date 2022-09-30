@@ -135,10 +135,10 @@
             <h6 class="h6-text">장소</h6>
             <h6 th:text="${product.getPrice()}" class="h6-text"></h6>
             <span style=" display: flex; justify-content: right;">
-             <span th:if="${product.getReplyCount() > 0}" style="display:flex;">
+                <span th:if="${product.getReplyCount() > 0}" style="display:flex;">
                     <img th:src="@{/images/sellBtn.png}" style="width:15px; height:15px">
                     <h6 class="h6-text" th:text="${product.getReplyCount()}"></h6>
-             </span>
+                </span>
                 &nbsp;&nbsp;
                 <span th:if="${product.getHeartCount() > 0}" style="display:flex;" >
                  <div th:if="${#lists.contains(userInfo?.heartProducts, product.id)}" style="display:flex;">
@@ -148,11 +148,10 @@
                     <div th:unless="${#lists.contains(userInfo?.heartProducts, product.id)}" style="display:flex;">
                      <img th:src="@{/images/heartBtn.png}" style="width:15px; height:15px">
                          <h6 class="h6-text" th:text="${product.getHeartCount()}"></h6>
-                 </div>
-
-             </span>
-
+                    </div>
+                </span>
             </span>
+
         </div>
     </div>
 </div>

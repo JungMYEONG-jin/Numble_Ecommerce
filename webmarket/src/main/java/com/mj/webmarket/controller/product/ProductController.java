@@ -110,7 +110,7 @@ public class ProductController {
         // product to response dto
         Product findedProudct = productService.findOneById(productId);
         ProductDetailResponse productResponse = productService.toProductResponseDto(findedProudct);
-
+        log.info("reply count {}", findedProudct.getReplyCount());
         User owner = userService.findUser(findedProudct.getUser().getEmail());
         UserResponseDto ownerInfo = userService.toUserResponseDto(owner);
 
