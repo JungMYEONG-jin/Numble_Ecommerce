@@ -15,4 +15,8 @@ public interface ProductService {
     ProductDetailResponse toProductResponseDto(Product product);
     void addProduct(Product product);
     void deleteProduct(Long productId);
+    void addHeartCount(Product product);
+    void decreaseHeartCount(Product product);
+//    void addReplyCount(Product product);
+//    void decreaseReplyCount(Product product);
 }

@@ -107,6 +107,16 @@ public class ProductServiceImpl implements ProductService{
         productRepository.deleteById(productId);
     }
 
+    @Override
+    public void addHeartCount(Product product) {
+        product.addHeartCount();
+    }
+
+    @Override
+    public void decreaseHeartCount(Product product) {
+        product.decreaseHeartCount();
+    }
+
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {
         Category category = categoryRepository.findById(form.getCategoryId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByTitleAndCategory(form.getTitle(), category);
@@ -124,9 +134,6 @@ public class ProductServiceImpl implements ProductService{
     public List<Product> searchAll() {
         return productRepository.findAll();
     }
-
-
-
 
     private boolean isEmpty(String text){
         if(text==null || text.isEmpty())

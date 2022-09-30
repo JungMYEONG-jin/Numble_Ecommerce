@@ -4,6 +4,7 @@ import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
+import com.mj.webmarket.entity.heart.Heart;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.Reply;
 import com.mj.webmarket.entity.user.User;
@@ -123,11 +124,16 @@ public class ProductController {
     }
 
 
-//    //좋아요 기능
-//    @PostMapping("/products/{productId}/addHeart")
-//    public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails){
-//        User user = userService.findUser(userDetails.getUsername());
-//        heartService
-//    }
+    //좋아요 기능
+    @PostMapping("/products/{productId}/addHeart")
+    @ResponseBody
+    public String addHeart(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails){
+        User user = userService.findUser(userDetails.getUsername());
+        Product product = productService.findOneById(productId);
+        Heart heart = Heart.builder().productInfo(productId).user(user).product(product).build();
+        heartService.add(heart);
+        productService.addHeartCount(product);
+        return "성공적으로 추가하였습니다.";
+    }
 
 }
