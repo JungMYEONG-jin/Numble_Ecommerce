@@ -156,6 +156,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     public Page<ProductListResponse> productToProductListResponseDtoPage(Pageable pageable, List<Product> products) {
+
         List<ProductListResponse> productList = products.stream().map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
                 .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
         log.info("productList size {}", productList.size());

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class Product extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     List<ProductImage> productImages = new ArrayList<>();
-    //상품 정보
-//    @NotBlank(message = "상품 제목은 필수입니다.")
+
+    @NotBlank(message = "상품 제목은 필수입니다.")
     private String title;
     @Column(columnDefinition = "TEXT")
     private String description;
