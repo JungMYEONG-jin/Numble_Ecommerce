@@ -1,3 +1,11 @@
+## Regex
+
+1. 숫자만 남기기
+```java
+String s = num.replaceAll("[^0-9]+", "");
+```
+
+
 ManyToOne이 주인임 여기에 fetch LAZY로 주면 proxy로 객체를 생성
 
 ## Lazy Loading에서 발생하는 에러
