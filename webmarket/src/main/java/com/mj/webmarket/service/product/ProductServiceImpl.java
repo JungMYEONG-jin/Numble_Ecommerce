@@ -30,11 +30,11 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Page<Product> searchProductByCondition(ProductSearchForm form, Pageable pageable) {
-        if (isEmpty(form.getTitle()) && form.getCategoryId()==null){
+        if (isEmpty(form.getTitle()) && form.getCategory()==null){
             return searchAll(pageable);
-        }else if(isEmpty(form.getTitle()) && form.getCategoryId()!=null){
+        }else if(isEmpty(form.getTitle()) && form.getCategory()!=null){
             return searchByCategory(form, pageable);
-        }else if (!isEmpty(form.getTitle()) && form.getCategoryId()==null){
+        }else if (!isEmpty(form.getTitle()) && form.getCategory()==null){
             return searchByTitle(form, pageable);
         }else{
             return searchByTitleAndCategory(form, pageable);
@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private Page<Product> searchByTitleAndCategory(ProductSearchForm form, Pageable pageable) {
-        Category category = categoryRepository.findById(form.getCategoryId()).orElseThrow(()->new ProductNotFoundException());
+        Category category = categoryRepository.findById(form.getCategory().getId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByTitleAndCategory(form.getTitle(), category, pageable);
     }
 
@@ -51,7 +51,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private Page<Product> searchByCategory(ProductSearchForm form, Pageable pageable) {
-        Category category = categoryRepository.findById(form.getCategoryId()).orElseThrow(()->new ProductNotFoundException());
+        Category category = categoryRepository.findById(form.getCategory().getId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByCategory(category, pageable);
     }
 
@@ -61,11 +61,11 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> searchProductByCondition(ProductSearchForm form) {
-        if (isEmpty(form.getTitle()) && form.getCategoryId()==null){
+        if (isEmpty(form.getTitle()) && form.getCategory()==null){
             return searchAll();
-        }else if(isEmpty(form.getTitle()) && form.getCategoryId()!=null){
+        }else if(isEmpty(form.getTitle()) && form.getCategory()!=null){
             return searchByCategory(form);
-        }else if (!isEmpty(form.getTitle()) && form.getCategoryId()==null){
+        }else if (!isEmpty(form.getTitle()) && form.getCategory()==null){
             return searchByTitle(form);
         }else{
             return searchByTitleAndCategory(form);
@@ -132,7 +132,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {
-        Category category = categoryRepository.findById(form.getCategoryId()).orElseThrow(()->new ProductNotFoundException());
+        Category category = categoryRepository.findById(form.getCategory().getId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByTitleAndCategory(form.getTitle(), category);
     }
 
@@ -141,7 +141,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     private List<Product> searchByCategory(ProductSearchForm form) {
-        Category category = categoryRepository.findById(form.getCategoryId()).orElseThrow(()->new ProductNotFoundException());
+        Category category = categoryRepository.findById(form.getCategory().getId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByCategory(category);
     }
 

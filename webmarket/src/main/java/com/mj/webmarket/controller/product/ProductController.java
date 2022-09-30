@@ -61,7 +61,7 @@ public class ProductController {
 
         List<Product> productList = productService.searchProductByCondition(form);
         Page<ProductListResponse> products = productService.productToProductListResponseDtoPage(pageable, productList);
-
+        model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("userInfo", userResponseDto);
         model.addAttribute("products", products);
         model.addAttribute("searchForm", form);
@@ -83,6 +83,7 @@ public class ProductController {
         Page<ProductListResponse> products = productService.productToProductListResponseDtoPage(pageable, productList);
         model.addAttribute("userInfo", userResponseDto);
         model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("searchForm", form);
         return "products/productList";
     }
@@ -101,10 +102,10 @@ public class ProductController {
         User user = userService.findUser(userDetails.getUsername());
         UserResponseDto userResponseDto = userService.toUserResponseDto(user);
         model.addAttribute("userInfo", userResponseDto);
-        log.info("cateid {}, title {}", form.getCategoryId(), form.getTitle());
         List<Product> productList = productService.searchProductByCondition(form);
         Page<ProductListResponse> products = productService.productToProductListResponseDtoPage(pageable, productList);
         model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.getAllCategories());
         return "products/productList";
     }
 

@@ -107,11 +107,11 @@
 
 <article class="container">
     <form th:action="@{/products/search}" th:object="${searchForm}" method="POST" style="display: flex; justify-content: flex-end; padding: 10px 0;">
-        <select th:field="*{categoryId}" class="form-select">
+        <select th:field="*{category}" class="form-select">
             <option value="">==상품 카테고리==</option>
-            <option th:each="type : ${T(com.mj.webmarket.entity.type.CategoryType).values()}"
-                    th:value="${type.getId()}"
-                    th:text="${type.name()}">음식
+            <option th:each="category : ${categories}"
+                    th:value="${category.getId()}"
+                    th:text="${category.getName()}">음식
             </option>
         </select>
         <input type="text" placeholder="검색할 상품명을 입력해주세요." th:field="*{title}">
