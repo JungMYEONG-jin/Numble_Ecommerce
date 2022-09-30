@@ -184,6 +184,7 @@ public class ProductController {
         ArrayList<ProductImage> products = s3Uploader.uploadList(form.getProductImages(), "/images", product);//임시
         for (ProductImage productImage : products) {
             productImageService.save(productImage);
+            log.info("postProduct {}", productImage.getServerFileName());
         }
         return "redirect:/products";
     }
