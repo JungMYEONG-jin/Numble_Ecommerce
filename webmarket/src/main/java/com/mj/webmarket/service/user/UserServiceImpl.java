@@ -29,7 +29,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findUser(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("해당 이메일로 가입된 계정이 존재하지 않습니다."));
+    }
+
+    @Override
+    public User findUserById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("해당 아이디가 존재하지 않습니다."));
     }
 
     @Override

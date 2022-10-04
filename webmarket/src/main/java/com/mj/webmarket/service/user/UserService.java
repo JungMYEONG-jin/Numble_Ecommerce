@@ -18,6 +18,8 @@ public interface UserService {
      */
     User findUser(String email);
 
+    User findUserById(Long userId);
+
     /**
      * 사용자의 닉네임을 수정합니다.
      * @param User 수정활 사용자 엔티티

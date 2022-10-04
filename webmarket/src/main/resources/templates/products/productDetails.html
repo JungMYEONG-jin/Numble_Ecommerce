@@ -161,11 +161,11 @@
             <img th:src="${ownerInfo.getProfileImage()}"/>
         </span>
     <span th:text="${ownerInfo.getNickName()}"></span>
-<!--    <span style="text-align: right;">-->
-<!--        <a  th:href="@{/products/{product_id}/memberProducts/{owner_id}(product_id = ${product.id}, owner_id = ${userInfo.userId})}">-->
-<!--            <div th:text="${userInfo.nickName}+'님의 상품 전체보기'"></div>-->
-<!--        </a>-->
-<!--    </span>-->
+    <span style="text-align: right;">
+        <a  th:href="@{/products/{productId}/memberProducts/{userId}(productId = ${product.id}, userId = ${ownerInfo.userId})}">
+            <div th:text="${ownerInfo.nickName}+'님의 상품 전체보기'"></div>
+        </a>
+    </span>
 </div>
 
 <div class="div-info">

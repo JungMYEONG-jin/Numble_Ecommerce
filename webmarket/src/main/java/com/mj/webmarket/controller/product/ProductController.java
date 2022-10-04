@@ -190,6 +190,23 @@ public class ProductController {
     }
 
 
+    // 판매자 상품 리스트 보기
+    @GetMapping("products/{productId}/memberProducts/{ownerId}")
+    public String getOwnerInfo(@PathVariable Long productId, @PathVariable Long ownerId, @AuthenticationPrincipal UserDetails userDetails, Model model){
+        List<ProductListResponse> productList = productService.getUserProductList(ownerId);
+
+        User user = userService.findUser(userDetails.getUsername());
+        UserResponseDto userInfo = userService.toUserResponseDto(user);
+        log.info("userid {}", userInfo.getUserId());
+
+        model.addAttribute("userInfo", userInfo);
+        model.addAttribute("productList", productList);
+        model.addAttribute("pageInfo", productId);
+
+        return "products/MemberProductList";
+    }
+
+
 
 
 }
