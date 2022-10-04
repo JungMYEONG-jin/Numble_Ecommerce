@@ -12,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserUpdateDto {
 
     private String nickname;
-    private MultipartFile multipartFile;
+    private MultipartFile userImage;
 
     @Builder
-    public UserUpdateDto(String nickname, MultipartFile multipartFile) {
+    public UserUpdateDto(String nickname, MultipartFile userImage) {
         this.nickname = nickname;
-        this.multipartFile = multipartFile;
+        this.userImage = userImage;
     }
 }

@@ -158,7 +158,9 @@ public class MyPageController {
         User user = userService.findUser(userDetails.getUsername());
         UserUpdateDto userUpdateDto = UserUpdateDto.builder().nickname(user.getNickname()).build();
         model.addAttribute("form", userUpdateDto);
-        model.addAttribute("profileImage", user.getUserImage().getServerFileName());
+        UserImage userImage = userImageService.findByUser(user.getId());
+        log.info("original {}", userImage.getOriginalFileName());
+        log.info("server {}", userImage.getServerFileName());
         return "mypage/myProfileUpdate";
     }
 
@@ -167,17 +169,26 @@ public class MyPageController {
         User user = userService.findUser(userDetails.getUsername());
         userService.update(user, form.getNickname());
 
-        if (!form.getMultipartFile().isEmpty()){
-            MultipartFile multipartFile = form.getMultipartFile();
+        if (!form.getUserImage().isEmpty()){
+            MultipartFile multipartFile = form.getUserImage();
             UserImage userImage = userImageService.findByUser(user.getId());
             if (userImage==null){
                 userImage = UserImage.builder().user(user).build();
             }
-            String serverUrl = s3Uploader.upload(form.getMultipartFile(), "members");
-            userImageService.updateMemberImage(userImage, "members",
-                    form.getMultipartFile().getOriginalFilename(), serverUrl);
+            String serverUrl = s3Uploader.upload(form.getUserImage(), "/images");
+            userImageService.updateMemberImage(userImage, "/images",
+                    form.getUserImage().getOriginalFilename(), serverUrl);
+            log.info("original {}", userImage.getOriginalFileName());
+            log.info("server {}", userImage.getServerFileName());
         }
         return "redirect:/mypage";
+    }
+
+    @DeleteMapping("mypage/products/{productId}/delete")
+    @ResponseBody
+    public String deleteProduct(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails){
+
+        return "OK";
     }
 
 }

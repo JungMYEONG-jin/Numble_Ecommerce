@@ -1,5 +1,6 @@
 package com.mj.webmarket.service.user;
 
+import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.entity.user.UserImage;
 import com.mj.webmarket.repository.user.UserImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class UserImageServiceImpl implements UserImageService{
     @Override
     public UserImage save(UserImage userImage) {
         return userImageRepository.save(userImage);
+    }
+
+    @Override
+    public UserImage init(User user) {
+        return UserImage.builder().user(user).filePath("default").originalFileName("default").serverFileName("/images/default_image.png").build();
     }
 }

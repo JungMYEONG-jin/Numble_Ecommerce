@@ -16,11 +16,11 @@ public class UserImage extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String filePath = "/members/";
-    private String serverFileName = "";
-    private String originalFileName = "";
+    private String filePath;
+    private String serverFileName;
+    private String originalFileName;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

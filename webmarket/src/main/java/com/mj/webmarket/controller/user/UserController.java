@@ -3,24 +3,24 @@ package com.mj.webmarket.controller.user;
 import com.mj.webmarket.entity.dto.user.SignDto;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.exception.UserEmailDupException;
+import com.mj.webmarket.service.user.UserImageServiceImpl;
 import com.mj.webmarket.service.user.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserServiceImpl userService;
+    private final UserServiceImpl userService;
+    private final UserImageServiceImpl userImageService;
 
     @GetMapping("/")
     public String home(){
@@ -50,6 +50,7 @@ public class UserController {
         User joinUser = userService.join(user);
         if (joinUser.getId()!=null){
             // 추후 구현
+            userImageService.save(userImageService.init(joinUser));
         }
         log.info("redirect to home");
         return "redirect:/";

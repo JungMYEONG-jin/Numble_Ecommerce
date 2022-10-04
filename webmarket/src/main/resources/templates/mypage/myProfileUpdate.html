@@ -64,11 +64,11 @@
             <label class="input-file-button" for="files">
                 프로필 사진 선택하기
             </label>
-            <input type="file" id="files" th:field="*{multipartFile}" style="display:none">
+            <input type="file" id="files" th:field="*{userImage}" style="display:none">
         </div>
 
         <div>
-            <input type="text" th:field="*{nickName}" th:value="${form?.nickName}">
+            <input type="text" th:field="*{nickname}" th:value="${form?.nickname}">
         </div>
 
         <div class="updateBtn">
@@ -80,7 +80,7 @@
 </body>
 <script>
     document.getElementById("files").onchange = function () {
-        var reader = new FileReader();
+        let reader = new FileReader();
 
         reader.onload = function (e) {
             // get loaded data and render thumbnail.
