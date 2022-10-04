@@ -94,6 +94,8 @@ public class ProductServiceImpl implements ProductService{
                 .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
     }
 
+
+
     @Override
     public Product findOneById(Long productId) {
         return productRepository.findById(productId).orElseThrow(()->new ProductNotFoundException("해당 번호의 상품이 존재하지 않습니다..."));

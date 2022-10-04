@@ -1,5 +1,6 @@
 package com.mj.webmarket.service.heart;
 
+import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.heart.Heart;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,8 @@ public interface HeartService {
 
     public List<Heart> getUserHeart(Long userId);
     public Page<Heart> getUserHeart(Long userId, Pageable pageable);
+
+    public List<ProductListResponse> getMyHeartProducts(Long userId);
 
     public void deleteAll(Long productId);
     public void deleteOne(Long ProductId, Long userId);

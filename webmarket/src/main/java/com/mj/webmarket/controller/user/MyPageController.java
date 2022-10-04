@@ -8,6 +8,7 @@ import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductStatus;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.exception.ProductNotFoundException;
+import com.mj.webmarket.service.heart.HeartServiceImpl;
 import com.mj.webmarket.service.product.ProductServiceImpl;
 import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class MyPageController {
 
     private final UserServiceImpl userService;
     private final ProductServiceImpl productService;
+    private final HeartServiceImpl heartService;
 
     /**
      * 내 메인 페이지
@@ -135,5 +137,15 @@ public class MyPageController {
 
         return "mypage/myProductDetails";
     }
+
+
+    @GetMapping("/mypage/hearts")
+    public String showMyHeartProducts(@AuthenticationPrincipal UserDetails userDetails, Model model){
+        User user = userService.findUser(userDetails.getUsername());
+        List<ProductListResponse> productList = heartService.getMyHeartProducts(user.getId());
+        model.addAttribute("productList", productList);
+        return "mypage/myHeartProducts";
+    }
+
 
 }
