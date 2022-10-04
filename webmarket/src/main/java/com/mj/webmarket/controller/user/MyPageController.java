@@ -1,25 +1,30 @@
 package com.mj.webmarket.controller.user;
 
+import com.mj.webmarket.aws.S3Uploader;
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductStatusRequest;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
+import com.mj.webmarket.entity.dto.user.UserUpdateDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductStatus;
 import com.mj.webmarket.entity.user.User;
+import com.mj.webmarket.entity.user.UserImage;
 import com.mj.webmarket.exception.ProductNotFoundException;
 import com.mj.webmarket.service.heart.HeartServiceImpl;
 import com.mj.webmarket.service.product.ProductServiceImpl;
+import com.mj.webmarket.service.user.UserImageServiceImpl;
 import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -30,7 +35,8 @@ public class MyPageController {
     private final UserServiceImpl userService;
     private final ProductServiceImpl productService;
     private final HeartServiceImpl heartService;
-
+    private final UserImageServiceImpl userImageService;
+    private S3Uploader s3Uploader = new S3Uploader();
     /**
      * 내 메인 페이지
      * @param userDetails
@@ -147,5 +153,31 @@ public class MyPageController {
         return "mypage/myHeartProducts";
     }
 
+    @GetMapping("/mypage/update")
+    public String updateMyProfile(@AuthenticationPrincipal UserDetails userDetails, Model model){
+        User user = userService.findUser(userDetails.getUsername());
+        UserUpdateDto userUpdateDto = UserUpdateDto.builder().nickname(user.getNickname()).build();
+        model.addAttribute("form", userUpdateDto);
+        model.addAttribute("profileImage", user.getUserImage().getServerFileName());
+        return "mypage/myProfileUpdate";
+    }
+
+    @PostMapping("/mypage/update")
+    public String updateMyProfilePost(@AuthenticationPrincipal UserDetails userDetails, @ModelAttribute UserUpdateDto form) throws IOException {
+        User user = userService.findUser(userDetails.getUsername());
+        userService.update(user, form.getNickname());
+
+        if (!form.getMultipartFile().isEmpty()){
+            MultipartFile multipartFile = form.getMultipartFile();
+            UserImage userImage = userImageService.findByUser(user.getId());
+            if (userImage==null){
+                userImage = UserImage.builder().user(user).build();
+            }
+            String serverUrl = s3Uploader.upload(form.getMultipartFile(), "members");
+            userImageService.updateMemberImage(userImage, "members",
+                    form.getMultipartFile().getOriginalFilename(), serverUrl);
+        }
+        return "redirect:/mypage";
+    }
 
 }
