@@ -148,11 +148,13 @@
             <h6 class="h6-text">좋아요</h6>
         </div>
         <div class="div-status">
-            <div class="left">
-                예약중으로 변경
+            <div class="left" th:text="${product.getProductStatus.getValue()}">
+                상태
             </div>
             <div class="right">
-                거래완료로 변경
+                <a th:href="@{/mypage/products/{product_id}/setComplete(product_id = ${product.id})}">
+                    거래완료로 변경
+                </a>
             </div>
         </div>
     </div>

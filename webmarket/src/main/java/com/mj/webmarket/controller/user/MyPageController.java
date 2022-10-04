@@ -2,6 +2,7 @@ package com.mj.webmarket.controller.user;
 
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
+import com.mj.webmarket.entity.dto.product.ProductStatusRequest;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductStatus;
@@ -12,11 +13,11 @@ import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,14 +45,26 @@ public class MyPageController {
         return "mypage/myPage";
     }
 
+    /**
+     * 내 상품들 보기
+     * @param userDetails
+     * @param model
+     * @return
+     */
     @GetMapping("/mypage/products")
     public String showMyProducts(@AuthenticationPrincipal UserDetails userDetails, Model model){
         User user = userService.findUser(userDetails.getUsername());
-        List<ProductListResponse> productList = productService.getUserProductList(user.getId());
+        List<ProductListResponse> productList = productService.getUserCanSellProductList(user.getId());
         model.addAttribute("productList", productList);
         return "mypage/myProducts";
     }
 
+    /**
+     * 판매완료 상품 보기
+     * @param userDetails
+     * @param model
+     * @return
+     */
     @GetMapping("/mypage/products/complete")
     public String showMyCompletedProducts(@AuthenticationPrincipal UserDetails userDetails, Model model){
         User user = userService.findUser(userDetails.getUsername());
@@ -60,7 +73,40 @@ public class MyPageController {
         return "mypage/myCompletedProducts";
     }
 
+    /**
+     * 상태 변경
+     * @param productId
+     * @param userDetails
+     * @param productStatusRequest
+     * @return
+     */
+    @PutMapping("/mypage/products/{productId}/setStatus")
+    @ResponseBody
+    public String updateProductStatus(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails, @RequestBody ProductStatusRequest productStatusRequest){
+        Product product = productService.findOneById(productId);
+        productService.changeProductStatus(product, productStatusRequest.getProductStatus());
+        return "success";
+    }
 
+    /**
+     * 판매완료로 변경
+     * @param productId
+     * @param userDetails
+     * @return
+     */
+    @GetMapping("/mypage/products/{productId}/setComplete")
+    public String updateProductComplete(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails){
+        Product product = productService.findOneById(productId);
+        productService.changeProductStatus(product, ProductStatus.FINISHED);
+        return "redirect:/mypage/products/complete";
+    }
+
+    @GetMapping("/mypage/products/{productId}/setTrading")
+    public String updateProductTrading(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails){
+        Product product = productService.findOneById(productId);
+        productService.changeProductStatus(product, ProductStatus.TRADING);
+        return "redirect:/mypage/products";
+    }
 
     /**
      * 특정 상품 보기

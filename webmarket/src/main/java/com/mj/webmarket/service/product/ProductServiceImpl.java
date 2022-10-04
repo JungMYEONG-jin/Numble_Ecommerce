@@ -81,6 +81,13 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductListResponse> getUserCanSellProductList(Long userId) {
+        List<Product> byUserId = productRepository.findByUserId(userId);
+        return byUserId.stream().filter(product -> product.getProductStatus().equals(ProductStatus.TRADING)).map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
+                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
+    }
+
+    @Override
     public List<ProductListResponse> getUserCompletedProduct(Long userId) {
         List<Product> byUserId = productRepository.findByUserId(userId);
         return byUserId.stream().filter(product -> product.getProductStatus().equals(ProductStatus.FINISHED)).map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
@@ -144,6 +151,12 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void decreaseReplyCount(Product product) {
         product.decreaseReplyCount();
+    }
+
+    @Transactional
+    @Override
+    public void changeProductStatus(Product product, ProductStatus productStatus) {
+        product.changeStatus(productStatus);
     }
 
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {
