@@ -13,6 +13,7 @@ public interface ProductService {
     Page<Product> searchProductByCondition(ProductSearchForm form, Pageable pageable);
     List<Product> searchProductByCondition(ProductSearchForm form);
     List<ProductListResponse> getUserProductList(Long userId);
+    List<ProductListResponse> getUserCompletedProduct(Long userId);
     Product findOneById(Long productId);
     ProductDetailResponse toProductResponseDto(Product product);
     void addProduct(Product product);

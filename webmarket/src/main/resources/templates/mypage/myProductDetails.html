@@ -168,7 +168,7 @@
         <option th:each="status : ${productStatus}" th:value="${status}" th:text="${status.value}" th:selected="${status?.value eq product?.productStatus?.value}"></option>
     </select>
     <div th:text="${product.price}"></div>
-    <div th:text="${product.category}"></div>
+    <div th:text="${product.getCategory().getName()}"></div>
     <div th:text="${product.description}"></div>
 </div>
 

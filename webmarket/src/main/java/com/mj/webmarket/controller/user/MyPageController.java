@@ -1,6 +1,7 @@
 package com.mj.webmarket.controller.user;
 
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
+import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductStatus;
@@ -17,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +28,12 @@ public class MyPageController {
     private final UserServiceImpl userService;
     private final ProductServiceImpl productService;
 
+    /**
+     * 내 메인 페이지
+     * @param userDetails
+     * @param model
+     * @return
+     */
     @GetMapping("/mypage")
     public String goMyPage(@AuthenticationPrincipal UserDetails userDetails, Model model){
 
@@ -35,6 +44,31 @@ public class MyPageController {
         return "mypage/myPage";
     }
 
+    @GetMapping("/mypage/products")
+    public String showMyProducts(@AuthenticationPrincipal UserDetails userDetails, Model model){
+        User user = userService.findUser(userDetails.getUsername());
+        List<ProductListResponse> productList = productService.getUserProductList(user.getId());
+        model.addAttribute("productList", productList);
+        return "mypage/myProducts";
+    }
+
+    @GetMapping("/mypage/products/complete")
+    public String showMyCompletedProducts(@AuthenticationPrincipal UserDetails userDetails, Model model){
+        User user = userService.findUser(userDetails.getUsername());
+        List<ProductListResponse> userCompletedProduct = productService.getUserCompletedProduct(user.getId());
+        model.addAttribute("productList", userCompletedProduct);
+        return "mypage/myCompletedProducts";
+    }
+
+
+
+    /**
+     * 특정 상품 보기
+     * @param productId
+     * @param userDetails
+     * @param model
+     * @return
+     */
     @GetMapping("/mypage/products/{productId}")
     public String showMySpecificProduct(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model){
         String email = userDetails.getUsername();
@@ -47,11 +81,11 @@ public class MyPageController {
         UserResponseDto userInfo = userService.toUserResponseDto(user);
 
         ProductDetailResponse productDetailResponse = productService.toProductResponseDto(product);
-        ProductStatus productStatus = productDetailResponse.getProductStatus();
+        ProductStatus[] productStatuses = ProductStatus.values();
 
         model.addAttribute("userInfo", userInfo);
         model.addAttribute("product", productDetailResponse);
-        model.addAttribute("productStatus", productStatus);
+        model.addAttribute("productStatus", productStatuses);
 
         return "mypage/myProductDetails";
     }
