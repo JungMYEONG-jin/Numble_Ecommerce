@@ -1,8 +1,10 @@
 package com.mj.webmarket.controller.user;
 
 import com.mj.webmarket.entity.dto.user.SignDto;
+import com.mj.webmarket.entity.trade.Trade;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.exception.UserEmailDupException;
+import com.mj.webmarket.service.trade.TradeServiceImpl;
 import com.mj.webmarket.service.user.UserImageServiceImpl;
 import com.mj.webmarket.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class UserController {
 
     private final UserServiceImpl userService;
     private final UserImageServiceImpl userImageService;
+    private final TradeServiceImpl tradeService;
 
     @GetMapping("/")
     public String home(){
@@ -51,6 +54,8 @@ public class UserController {
         if (joinUser.getId()!=null){
             // 추후 구현
             userImageService.save(userImageService.init(joinUser));
+            Trade trade = tradeService.toTrade(user);
+            tradeService.save(trade);
         }
         log.info("redirect to home");
         return "redirect:/";
