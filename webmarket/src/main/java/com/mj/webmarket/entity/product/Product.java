@@ -2,6 +2,7 @@ package com.mj.webmarket.entity.product;
 
 import com.mj.webmarket.common.BaseTimeEntity;
 import com.mj.webmarket.entity.category.Category;
+import com.mj.webmarket.entity.dto.product.ProductUpdateRequest;
 import com.mj.webmarket.entity.heart.Heart;
 import com.mj.webmarket.entity.user.User;
 import lombok.Builder;
@@ -81,6 +82,14 @@ public class Product extends BaseTimeEntity {
     public void addImage(ProductImage image){
         this.productImages.add(image);
         image.setProduct(this);
+    }
+
+    public Product update(ProductUpdateRequest request){
+        this.title = request.getTitle();
+        this.description = request.getDescription();
+        this.category = request.getCategory();
+        this.price = request.getPrice();
+        return this;
     }
 
 

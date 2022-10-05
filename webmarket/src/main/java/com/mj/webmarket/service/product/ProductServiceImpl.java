@@ -4,6 +4,7 @@ import com.mj.webmarket.entity.category.Category;
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
+import com.mj.webmarket.entity.dto.product.ProductUpdateRequest;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductImageInit;
 import com.mj.webmarket.entity.product.ProductStatus;
@@ -166,6 +167,13 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public void deleteProduct(Long productId, Long userId) {
         productRepository.deleteByIdAndUserId(productId, userId);
+    }
+
+    @Transactional
+    @Override
+    public Product updateProduct(Long productId, ProductUpdateRequest request) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException("해당 번호 상품이 존재하지 않습니다."));
+        return product.update(request);
     }
 
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {

@@ -4,15 +4,16 @@ import com.mj.webmarket.aws.S3Uploader;
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductStatusRequest;
+import com.mj.webmarket.entity.dto.product.ProductUpdateRequest;
 import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.dto.user.UserUpdateDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductImage;
-import com.mj.webmarket.entity.product.ProductImageInit;
 import com.mj.webmarket.entity.product.ProductStatus;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.entity.user.UserImage;
 import com.mj.webmarket.exception.ProductNotFoundException;
+import com.mj.webmarket.service.category.CategoryServiceImpl;
 import com.mj.webmarket.service.heart.HeartServiceImpl;
 import com.mj.webmarket.service.product.ProductImageServiceImpl;
 import com.mj.webmarket.service.product.ProductServiceImpl;
@@ -25,6 +26,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +44,7 @@ public class MyPageController {
     private final UserImageServiceImpl userImageService;
     private final ProductImageServiceImpl productImageService;
     private final ReplyServiceImpl replyService;
+    private final CategoryServiceImpl categoryService;
     private S3Uploader s3Uploader = new S3Uploader();
     /**
      * 내 메인 페이지
@@ -206,6 +209,22 @@ public class MyPageController {
         heartService.deleteAll(productId);
         productService.deleteProduct(productId, user.getId());
         return "redirect:/mypage";
+    }
+
+    @GetMapping("mypage/products/{productId}/update")
+    public String updateProduct(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails, Model model){
+        Product product = productService.findOneById(productId);
+        ProductUpdateRequest form = ProductUpdateRequest.builder().price(product.getPrice()).description(product.getDescription()).title(product.getTitle()).category(product.getCategory()).build();
+        model.addAttribute("productId", productId);
+        model.addAttribute("form", form);
+        model.addAttribute("categoryList", categoryService.getAllCategories());
+        return "mypage/myProductUpdate";
+    }
+
+    @PostMapping("mypage/products/{productId}/update")
+    public String updateProductPost(@PathVariable Long productId, @AuthenticationPrincipal UserDetails userDetails, @ModelAttribute @Validated ProductUpdateRequest form){
+        productService.updateProduct(productId, form);
+        return "redirect:/mypage/products/" + productId;
     }
 
 

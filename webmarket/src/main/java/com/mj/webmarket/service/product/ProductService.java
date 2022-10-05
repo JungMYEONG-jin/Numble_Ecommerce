@@ -3,6 +3,7 @@ package com.mj.webmarket.service.product;
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
+import com.mj.webmarket.entity.dto.product.ProductUpdateRequest;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductStatus;
 import org.springframework.data.domain.Page;
@@ -26,5 +27,7 @@ public interface ProductService {
     void decreaseReplyCount(Product product);
     void changeProductStatus(Product product, ProductStatus productStatus);
     void deleteProduct(Long productId, Long userId);
+
+    Product updateProduct(Long productId, ProductUpdateRequest request);
 
 }
