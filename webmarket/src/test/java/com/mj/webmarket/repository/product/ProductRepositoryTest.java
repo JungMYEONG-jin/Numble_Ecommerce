@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @SpringBootTest
 class ProductRepositoryTest {
 
@@ -21,21 +25,8 @@ class ProductRepositoryTest {
 
     @Test
     void findByCategoryTest() {
-        Category category = new Category();
-        category.setId(CategoryType.음식.getId().longValue());
-        category.setName(CategoryType.음식.name());
-        categoryRepository.save(category);
-
-        for(int i=1;i<=100;i++){
-            if(i%2==1){
-                Product product = Product.builder().price(16000).category(category).heartCount(0).replyCount(0).productStatus(ProductStatus.TRADING).title("치킨").build();
-                productRepository.save(product);
-            }else if(i%2==0){
-                Product product = Product.builder().price(22000).category(category).heartCount(0).replyCount(0).productStatus(ProductStatus.TRADING).title("돈까스").build();
-                productRepository.save(product);
-            }
-        }
-
+        List<Category> collect = Arrays.stream(CategoryType.values()).map(categoryType -> Category.builder().name(categoryType.name()).id(categoryType.getId().longValue()).build()).collect(Collectors.toList());
+        categoryRepository.saveAll(collect);
     }
 
 }

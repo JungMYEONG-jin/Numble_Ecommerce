@@ -105,6 +105,10 @@
 <body>
 <div th:replace="layout/header :: authorize-fragment"/>
 
+<div class="mypage">
+    <a th:href="@{/mypage}" th:text="내페이지">내 페이지 보기</a>
+</div>
+
 <article class="container">
     <form th:action="@{/products/search}" th:object="${searchForm}" method="POST" style="display: flex; justify-content: flex-end; padding: 10px 0;">
         <select th:field="*{category}" class="form-select">

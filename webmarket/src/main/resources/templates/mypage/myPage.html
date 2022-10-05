@@ -140,6 +140,11 @@
 </div>
 
 <div class="div-index">
+  <div class="left"> <img th:src="@{/images/addBtn.png}"/> </div>
+  <div class="right"> <a href="/products/register">상품등록</a></div>
+</div>
+
+<div class="div-index">
   <p sec:authorize="isAuthenticated()"><a href="/logout">로그아웃</a></p>
 </div>
 
