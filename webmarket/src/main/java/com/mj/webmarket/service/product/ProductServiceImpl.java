@@ -5,6 +5,7 @@ import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
 import com.mj.webmarket.entity.dto.product.ProductSearchForm;
 import com.mj.webmarket.entity.product.Product;
+import com.mj.webmarket.entity.product.ProductImageInit;
 import com.mj.webmarket.entity.product.ProductStatus;
 import com.mj.webmarket.exception.ProductNotFoundException;
 import com.mj.webmarket.repository.category.CategoryRepository;
@@ -77,21 +78,21 @@ public class ProductServiceImpl implements ProductService{
     public List<ProductListResponse> getUserProductList(Long userId) {
         List<Product> byUserId = productRepository.findByUserId(userId);
         return byUserId.stream().map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
-                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
+                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? ProductImageInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductListResponse> getUserCanSellProductList(Long userId) {
         List<Product> byUserId = productRepository.findByUserId(userId);
         return byUserId.stream().filter(product -> product.getProductStatus().equals(ProductStatus.TRADING)).map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
-                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
+                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? ProductImageInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductListResponse> getUserCompletedProduct(Long userId) {
         List<Product> byUserId = productRepository.findByUserId(userId);
         return byUserId.stream().filter(product -> product.getProductStatus().equals(ProductStatus.FINISHED)).map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
-                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
+                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? ProductImageInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
     }
 
 
@@ -161,6 +162,12 @@ public class ProductServiceImpl implements ProductService{
         product.changeStatus(productStatus);
     }
 
+    @Transactional
+    @Override
+    public void deleteProduct(Long productId, Long userId) {
+        productRepository.deleteByIdAndUserId(productId, userId);
+    }
+
     private List<Product> searchByTitleAndCategory(ProductSearchForm form) {
         Category category = categoryRepository.findById(form.getCategory().getId()).orElseThrow(()->new ProductNotFoundException());
         return productRepository.findByTitleAndCategory(form.getTitle(), category);
@@ -188,7 +195,7 @@ public class ProductServiceImpl implements ProductService{
     public Page<ProductListResponse> productToProductListResponseDtoPage(Pageable pageable, List<Product> products) {
 
         List<ProductListResponse> productList = products.stream().map(p -> ProductListResponse.builder().id(p.getId()).productStatus(p.getProductStatus())
-                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? "/images/chicken.jpeg" : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
+                .heartCount(p.getHeartCount()).replyCount(p.getReplyCount()).price(p.getPrice()).title(p.getTitle()).thumbnailImage(p.getProductImages().size() == 0 ? ProductImageInit.SERVER_FILE_NAME : p.getProductImages().get(0).getServerFileName()).build()).collect(Collectors.toList());
         log.info("productList size {}", productList.size());
         int start = (int) pageable.getOffset();
         log.info("start {} ", start);

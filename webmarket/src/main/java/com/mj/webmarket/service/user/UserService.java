@@ -36,5 +36,4 @@ public interface UserService {
     boolean duplicateEmailCheck(String email);
 
     UserResponseDto toUserResponseDto(User user);
-
 }

@@ -54,4 +54,5 @@ public class UserServiceImpl implements UserService{
         return UserResponseDto.builder().userId(user.getId()).nickName(user.getNickname()).profileImage(user.getUserImage()==null?userImg:user.getUserImage().getServerFileName())
                 .heartProducts(user.getHearts().stream().map(heart -> heart.getProductInfo()).collect(Collectors.toList())).build();
     }
+
 }

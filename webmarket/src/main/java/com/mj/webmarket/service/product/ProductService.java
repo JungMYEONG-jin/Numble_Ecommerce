@@ -25,5 +25,6 @@ public interface ProductService {
     void addReplyCount(Product product);
     void decreaseReplyCount(Product product);
     void changeProductStatus(Product product, ProductStatus productStatus);
+    void deleteProduct(Long productId, Long userId);
 
 }

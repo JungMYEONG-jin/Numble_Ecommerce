@@ -13,7 +13,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
     void deleteByProductId(Long productId);
     void deleteByUserId(Long userId);
     void deleteByProductIdAndUserId(Long productId, Long userId);
-
-
+    void deleteAllByProductId(Long productId);
 
 }

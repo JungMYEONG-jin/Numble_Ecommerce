@@ -13,6 +13,9 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    //삭제
+    void deleteByIdAndUserId(Long productId, Long userId);
+
     // all
     Page<Product> findAll(Pageable pageable);
     // category 검색 + 페이징

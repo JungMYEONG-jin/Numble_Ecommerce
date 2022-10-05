@@ -1,6 +1,5 @@
 package com.mj.webmarket.service.product;
 
-import com.mj.webmarket.entity.dto.product.ProductRegisterRequest;
 import com.mj.webmarket.entity.product.ProductImage;
 import com.mj.webmarket.repository.product.ProductImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +18,11 @@ public class ProductImageServiceImpl implements ProductImageService{
     public ProductImage save(ProductImage productImage) {
         return productImageRepository.save(productImage);
     }
+
+    @Transactional
+    @Override
+    public void deleteProductImages(Long productId) {
+        productImageRepository.deleteByProductId(productId);
+    }
+
 }

@@ -5,5 +5,6 @@ import com.mj.webmarket.entity.product.ProductImage;
 public interface ProductImageService {
 
     public ProductImage save(ProductImage productImage);
+    void deleteProductImages(Long productId);
 
 }
