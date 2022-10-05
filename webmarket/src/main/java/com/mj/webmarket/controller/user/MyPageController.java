@@ -1,5 +1,6 @@
 package com.mj.webmarket.controller.user;
 
+import com.mj.webmarket.aws.RealS3Uploader;
 import com.mj.webmarket.aws.S3Uploader;
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
@@ -9,6 +10,7 @@ import com.mj.webmarket.entity.dto.user.UserResponseDto;
 import com.mj.webmarket.entity.dto.user.UserUpdateDto;
 import com.mj.webmarket.entity.product.Product;
 import com.mj.webmarket.entity.product.ProductImage;
+import com.mj.webmarket.entity.product.ProductImageInit;
 import com.mj.webmarket.entity.product.ProductStatus;
 import com.mj.webmarket.entity.user.User;
 import com.mj.webmarket.entity.user.UserImage;
@@ -45,7 +47,8 @@ public class MyPageController {
     private final ProductImageServiceImpl productImageService;
     private final ReplyServiceImpl replyService;
     private final CategoryServiceImpl categoryService;
-    private S3Uploader s3Uploader = new S3Uploader();
+//    private S3Uploader s3Uploader = new S3Uploader();
+    private final RealS3Uploader s3Uploader;
     /**
      * 내 메인 페이지
      * @param userDetails
@@ -198,12 +201,12 @@ public class MyPageController {
         User user = userService.findUser(userDetails.getUsername());
         Product product = productService.findOneById(productId);
         List<ProductImage> productImages = product.getProductImages();
-        // 기본이미지가 아니라면 s3에 이미지 지우기
-//        if(!productImages.get(0).getServerFileName().equals(ProductImageInit.SERVER_FILE_NAME)) {
-//            for (ProductImage productImage : productImages) {
-////                s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
-//            }
-//        }
+//         기본이미지가 아니라면 s3에 이미지 지우기
+        if(!productImages.get(0).getServerFileName().equals(ProductImageInit.SERVER_FILE_NAME)) {
+            for (ProductImage productImage : productImages) {
+                s3Uploader.delete(productImage.getFilePath() + productImage.getOriginalFileName());
+            }
+        }
         replyService.deleteProductReviewAll(productId);
         productImageService.deleteProductImages(productId);
         heartService.deleteAll(productId);

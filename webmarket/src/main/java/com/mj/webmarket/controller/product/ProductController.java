@@ -1,5 +1,6 @@
 package com.mj.webmarket.controller.product;
 
+import com.mj.webmarket.aws.RealS3Uploader;
 import com.mj.webmarket.aws.S3Uploader;
 import com.mj.webmarket.entity.dto.product.ProductDetailResponse;
 import com.mj.webmarket.entity.dto.product.ProductListResponse;
@@ -44,7 +45,8 @@ public class ProductController {
     private final HeartServiceImpl heartService;
     private final CategoryServiceImpl categoryService;
     private final ProductImageServiceImpl productImageService;
-    private S3Uploader s3Uploader = new S3Uploader();
+//    private S3Uploader s3Uploader = new S3Uploader();
+    private final RealS3Uploader s3Uploader;
     private ProductSearchForm form = new ProductSearchForm();
 
     /**
@@ -180,8 +182,8 @@ public class ProductController {
         User user = userService.findUser(userDetails.getUsername());
         Product product = form.toProduct(user);
         productService.addProduct(product);
-//        ArrayList<ProductImage> products = s3Uploader.uploadList(form.getProductImages(), "products", product);
-        ArrayList<ProductImage> products = s3Uploader.uploadList(form.getProductImages(), "/images", product);//임시
+        ArrayList<ProductImage> products = s3Uploader.uploadList(form.getProductImages(), "products", product);
+//        ArrayList<ProductImage> products = s3Uploader.uploadList(form.getProductImages(), "/images", product);//임시
         for (ProductImage productImage : products) {
             productImageService.save(productImage);
             log.info("postProduct {}", productImage.getServerFileName());
